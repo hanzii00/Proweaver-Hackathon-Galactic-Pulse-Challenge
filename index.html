@@ -47,43 +47,9 @@
             <button class="menu-btn" onclick="changePilot()">Change Pilot</button>
         </nav>
     </div>
-    <!-- Preload images (optional, for performance) -->
-    <div style="display: none;">
-        <img id="playerShip" src="../hanz15-bacus-Proweaver-Hackathon---Galactic-Pulse-Challenge/assets/images/Ship1/Ship1.png" alt="Player Ship">
-        <img id="enemyShip" src="../hanz15-bacus-Proweaver-Hackathon---Galactic-Pulse-Challenge/assets/images/Ship2/Ship2.png" alt="Enemy Ship">
-    </div>
-    <!-- Audio elements (optional, for menu music/effects) -->
-    <audio id="backgroundMusic" src="../hanz15-bacus-Proweaver-Hackathon---Galactic-Pulse-Challenge/assets/audio/Nebula Neon - Cm - 129 BPM.wav" loop></audio>
-    <audio id="laserSound" src="../hanz15-bacus-Proweaver-Hackathon---Galactic-Pulse-Challenge/assets/audio/Nebula Neon - Cm - 129 BPM.wav"></audio>
-    <script src="js/main.js"></script>
-    <script>
-    // Dynamically load all game scripts in order when Start Mission is clicked
-    document.addEventListener('DOMContentLoaded', function() {
-        var startBtn = document.getElementById('startMissionBtn');
-        if (startBtn) {
-            startBtn.addEventListener('click', function() {
-                // Hide menu and username screens
-                var menu = document.getElementById('mainMenuScreen');
-                var user = document.getElementById('usernameScreen');
-                if (menu) menu.classList.add('hidden');
-                if (user) user.classList.add('hidden');
-                // Helper to load scripts in order
-                function loadScript(src, cb) {
-                    var s = document.createElement('script');
-                    s.src = src;
-                    s.onload = cb;
-                    document.body.appendChild(s);
-                }
-                loadScript('js/entities.js', function() {
-                    loadScript('js/game.js', function() {
-                        loadScript('js/index.js', function() {
-                            if (window.startGalacticPulseGame) window.startGalacticPulseGame();
-                        });
-                    });
-                });
-            });
-        }
-    });
-    </script>
+
+    <script src="js/index.js"></script>
+
+
 </body>
 </html>
