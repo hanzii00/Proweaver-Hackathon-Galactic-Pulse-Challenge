@@ -1,44 +1,33 @@
-// settings.js
-
-// Default settings
-const defaultSettings = {
-    difficulty: "normal",
-    sound: true,
-    music: true
-};
-
-// Load settings from localStorage or defaults
-function loadSettings() {
-    const savedSettings = JSON.parse(localStorage.getItem("gameSettings")) || defaultSettings;
-
-    // Set difficulty
-    document.getElementById("difficultyEasy").checked = savedSettings.difficulty === "easy";
-    document.getElementById("difficultyNormal").checked = savedSettings.difficulty === "normal";
-    document.getElementById("difficultyHard").checked = savedSettings.difficulty === "hard";
-
-    // Set audio toggles
-    document.getElementById("soundToggle").checked = savedSettings.sound;
-    document.getElementById("musicToggle").checked = savedSettings.music;
-}
-
-// Save settings to localStorage
 function saveSettings() {
+    const difficulty = document.querySelector('input[name="difficulty"]:checked').value;
+    const soundEnabled = document.getElementById("soundToggle").checked;
+    const musicEnabled = document.getElementById("musicToggle").checked;
+
     const settings = {
-        difficulty: document.querySelector('input[name="difficulty"]:checked').value,
-        sound: document.getElementById("soundToggle").checked,
-        music: document.getElementById("musicToggle").checked
+        difficulty,
+        soundEnabled,
+        musicEnabled
     };
 
-    localStorage.setItem("gameSettings", JSON.stringify(settings));
+    localStorage.setItem("galacticPulseSettings", JSON.stringify(settings));
     alert("Settings saved!");
 }
 
-// Reset to default
 function resetSettings() {
-    localStorage.removeItem("gameSettings");
-    loadSettings();
+    document.getElementById("difficultyNormal").checked = true;
+    document.getElementById("soundToggle").checked = true;
+    document.getElementById("musicToggle").checked = true;
+    saveSettings();
     alert("Settings reset to default!");
 }
 
-// Initialize settings when the page loads
-window.onload = loadSettings;
+function loadSettings() {
+    const settings = JSON.parse(localStorage.getItem("galacticPulseSettings"));
+    if (!settings) return;
+
+    document.querySelector(`input[name="difficulty"][value="${settings.difficulty}"]`).checked = true;
+    document.getElementById("soundToggle").checked = settings.soundEnabled;
+    document.getElementById("musicToggle").checked = settings.musicEnabled;
+}
+
+document.addEventListener("DOMContentLoaded", loadSettings);

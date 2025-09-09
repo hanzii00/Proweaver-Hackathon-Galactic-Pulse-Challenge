@@ -3,67 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galactic Pulse</title>
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-    <div class="stars" id="starfield"></div>
-    <canvas id="gameCanvas"></canvas>
-    
-    <div class="ui">
-        <div class="health-bar">
-            <div class="health-fill" id="healthBar"></div>
-        </div>
-        <div class="energy-bar">
-            <div class="energy-fill" id="energyBar"></div>
-        </div>
-        <div class="score" id="score">Score: 0</div>
-    </div>
-    
-    <div class="game-over" id="gameOver">
-        <div>GAME OVER</div>
-        <div style="font-size: 24px; margin-top: 20px;">Press SPACE to restart</div>
-    </div>
-    
-    <div class="controls">
-        WASD/Arrow Keys: Move | Mouse: Aim & Shoot | Space: Pulse Wave | R: Reload
-    </div>
-
-    <!-- Preload images -->
-    <div style="display: none;">
-        <img id="playerShip" src="assets/images/player.png" alt="Player Ship">
-        <img id="enemyShip" src="assets/images/enemy.png" alt="Enemy Ship">
-    </div>
-
-    <!-- Audio elements -->
-    <audio id="backgroundMusic" src="assets/audio/background_music.mp3" loop></audio>
-    <audio id="laserSound" src="assets/audio/laser_sound.wav"></audio>
-
-    <!-- Scripts -->
-    <script src="js/main.js"></script>
-    <script src="js/entities.js"></script>
-    <script src="js/game.js"></script>
-</body>
-</html><!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galactic Pulse</title>
+    <title>Resonance War</title>
     <meta name="description" content="Survive the galactic waves in this thrilling space adventure">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
 </head>
 <body>
     <div class="starfield" id="starfield"></div>
-    
-    <!-- Username Entry Screen -->
     <div class="container" id="usernameScreen">
         <header class="game-header">
-            <h1 class="game-title">Galactic Pulse</h1>
+            <h1 class="game-title">Resonance War</h1>
             <p class="game-subtitle">Enter your callsign, pilot</p>
         </header>
-
         <div class="username-form">
             <div class="input-group">
                 <label for="usernameInput" class="input-label">PILOT CALLSIGN</label>
@@ -74,7 +27,6 @@
             <p class="username-hint">Choose your pilot identity for the galactic logs</p>
         </div>
     </div>
-
     <!-- Main Menu Screen (initially hidden) -->
     <div class="container hidden" id="mainMenuScreen">
         <header class="game-header">
@@ -85,9 +37,8 @@
                 <span class="pilot-name" id="pilotName"></span>
             </div>
         </header>
-
         <nav class="main-menu">
-            <button class="menu-btn" onclick="location.href='game.html'">Start Mission</button>
+            <button class="menu-btn" id="startMissionBtn" type="button">Start Mission</button>
             <button class="menu-btn" onclick="location.href='howtoplay.html'">Flight Manual</button>
             <button class="menu-btn" onclick="location.href='scores.html'">Mission Scores</button>
             <button class="menu-btn" onclick="location.href='settings.html'">Ship Config</button>
@@ -95,7 +46,43 @@
             <button class="menu-btn" onclick="changePilot()">Change Pilot</button>
         </nav>
     </div>
-
+    <!-- Preload images (optional, for performance) -->
+    <div style="display: none;">
+        <img id="playerShip" src="../hanz15-bacus-Proweaver-Hackathon---Galactic-Pulse-Challenge/assets/images/Ship1/Ship1.png" alt="Player Ship">
+        <img id="enemyShip" src="../hanz15-bacus-Proweaver-Hackathon---Galactic-Pulse-Challenge/assets/images/Ship2/Ship2.png" alt="Enemy Ship">
+    </div>
+    <!-- Audio elements (optional, for menu music/effects) -->
+    <audio id="backgroundMusic" src="../hanz15-bacus-Proweaver-Hackathon---Galactic-Pulse-Challenge/assets/audio/Nebula Neon - Cm - 129 BPM.wav" loop></audio>
+    <audio id="laserSound" src="../hanz15-bacus-Proweaver-Hackathon---Galactic-Pulse-Challenge/assets/audio/Nebula Neon - Cm - 129 BPM.wav"></audio>
     <script src="js/main.js"></script>
+    <script>
+    // Dynamically load all game scripts in order when Start Mission is clicked
+    document.addEventListener('DOMContentLoaded', function() {
+        var startBtn = document.getElementById('startMissionBtn');
+        if (startBtn) {
+            startBtn.addEventListener('click', function() {
+                // Hide menu and username screens
+                var menu = document.getElementById('mainMenuScreen');
+                var user = document.getElementById('usernameScreen');
+                if (menu) menu.classList.add('hidden');
+                if (user) user.classList.add('hidden');
+                // Helper to load scripts in order
+                function loadScript(src, cb) {
+                    var s = document.createElement('script');
+                    s.src = src;
+                    s.onload = cb;
+                    document.body.appendChild(s);
+                }
+                loadScript('js/entities.js', function() {
+                    loadScript('js/game.js', function() {
+                        loadScript('js/index.js', function() {
+                            if (window.startGalacticPulseGame) window.startGalacticPulseGame();
+                        });
+                    });
+                });
+            });
+        }
+    });
+    </script>
 </body>
 </html>
