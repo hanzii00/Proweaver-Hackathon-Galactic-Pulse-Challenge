@@ -4,6 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Galactic Pulse</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="stars" id="starfield"></div>
+    <canvas id="gameCanvas"></canvas>
+    
+    <div class="ui">
+        <div class="health-bar">
+            <div class="health-fill" id="healthBar"></div>
+        </div>
+        <div class="energy-bar">
+            <div class="energy-fill" id="energyBar"></div>
+        </div>
+        <div class="score" id="score">Score: 0</div>
+    </div>
+    
+    <div class="game-over" id="gameOver">
+        <div>GAME OVER</div>
+        <div style="font-size: 24px; margin-top: 20px;">Press SPACE to restart</div>
+    </div>
+    
+    <div class="controls">
+        WASD/Arrow Keys: Move | Mouse: Aim & Shoot | SPACE: Pulse Wave | R: Reload
+    </div>
+
+    <!-- Preload images -->
+    <div style="display: none;">
+        <img id="playerShip" src="assets/images/player.png" alt="Player Ship">
+        <img id="enemyShip" src="assets/images/enemy.png" alt="Enemy Ship">
+    </div>
+
+    <!-- Audio elements -->
+    <audio id="backgroundMusic" src="assets/audio/background_music.mp3" loop></audio>
+    <audio id="laserSound" src="assets/audio/laser_sound.wav"></audio>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/entities.js"></script>
+    <script src="js/game.js"></script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galactic Pulse</title>
     <meta name="description" content="Survive the galactic waves in this thrilling space adventure">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/main.css">
