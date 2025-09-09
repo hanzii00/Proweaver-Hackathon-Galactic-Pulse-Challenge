@@ -6,16 +6,19 @@
     <title>Galactic Pulse - Settings</title>
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/settings.css">
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+    <style>
+       
+    </style>
 </head>
 <body>
     <div class="starfield" id="starfield"></div>
-    
+
     <div class="container">
         <header class="page-header">
             <h1>Settings</h1>
             <button class="back-btn" onclick="location.href='index.html'">← Back to Menu</button>
         </header>
-
         <div class="settings-content">
             <section class="setting-section">
                 <h2>Difficulty</h2>
@@ -34,7 +37,6 @@
                     </label>
                 </div>
             </section>
-
             <section class="setting-section">
                 <h2>Audio</h2>
                 <div class="setting-options">
@@ -50,10 +52,20 @@
                     </label>
                 </div>
             </section>
-
             <div class="settings-actions">
                 <button onclick="saveSettings()">Save Settings</button>
-                <button class="secondary-btn" onclick="resetSettings()">Reset to Default</button>
+                <button class="secondary-btn" onclick="showResetModal()">Reset to Default</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Galactic Popup Modal -->
+    <div id="settingsModal" class="galactic-modal">
+        <div class="modal-content">
+            <h3 id="modalTitle">Settings Saved!</h3>
+            <p id="modalMessage">Your settings have been saved successfully.</p>
+            <div class="modal-actions">
+                <button class="confirm-btn" onclick="hideSettingsModal()">OK</button>
             </div>
         </div>
     </div>

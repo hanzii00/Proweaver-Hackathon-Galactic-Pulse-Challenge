@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Galactic Pulse - Game</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
 </head>
 <body>
     <div class="stars" id="starfield"></div>
@@ -29,9 +30,15 @@
         WASD/Arrow Keys: Move | Mouse: Aim & Shoot | SPACE: Pulse Wave | R: Reload
     </div>
 
+    <!-- Exit Button -->
+    <button id="exitBtn" class="menu-btn" onclick="location.href='index.html'">Exit Mission</button>
+
     <!-- Scripts -->
     <script src="js/entities.js"></script>
     <script src="js/game.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/scores.js"></script>
+
+
 </body>
 </html>

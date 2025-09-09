@@ -6,16 +6,17 @@
     <title>Galactic Pulse - High Scores</title>
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/scores.css">
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+
 </head>
 <body>
     <div class="starfield" id="starfield"></div>
-    
+
     <div class="container">
         <header class="page-header">
             <h1>High Scores</h1>
             <button class="back-btn" onclick="location.href='index.html'">← Back to Menu</button>
         </header>
-
         <div class="scores-content">
             <div class="leaderboard">
                 <h2>Top Players</h2>
@@ -23,13 +24,24 @@
                     <!-- Scores will be populated by JavaScript -->
                 </div>
             </div>
-            
+
             <div class="scores-actions">
-                <button class="danger-btn" onclick="clearScores()">Clear All Scores</button>
+                <button class="danger-btn" onclick="showClearScoresModal()">Clear All Scores</button>
+            </div>
+        </div>
+
+        <!-- Galactic Popup Modal -->
+        <div id="clearScoresModal" class="galactic-modal">
+            <div class="modal-content">
+                <h3>Clear All Scores?</h3>
+                <p>Are you sure you want to erase all high scores?</p>
+                <div class="modal-actions">
+                    <button class="confirm-btn" onclick="clearScores()">Yes, Clear</button>
+                    <button class="cancel-btn" onclick="hideClearScoresModal()">Cancel</button>
+                </div>
             </div>
         </div>
     </div>
-
     <script src="js/scores.js"></script>
 </body>
 </html>

@@ -549,11 +549,41 @@ class GalacticPulse {
         });
         this.ctx.globalAlpha = 1;
     }
-    
-    gameOver() {
-        this.gameRunning = false;
-        document.getElementById('gameOver').style.display = 'block';
+  gameOver() {
+    this.gameRunning = false;
+    document.getElementById("gameOver").style.display = "block";
+
+    // --- Save score using current user from main.js ---
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    let playerName = currentUser && currentUser.username ? currentUser.username : "Anonymous";
+
+    let scores = JSON.parse(localStorage.getItem("galacticPulseScores")) || [];
+    let existingPlayer = scores.find(entry => entry.name === playerName);
+
+    if (existingPlayer) {
+        // Only update if this run has a higher score
+        if (this.score > existingPlayer.score) {
+            existingPlayer.score = this.score;
+        }
+    } else {
+        scores.push({ name: playerName, score: this.score });
     }
+
+    // Sort & keep top 10 scores
+    scores.sort((a, b) => b.score - a.score);
+    scores = scores.slice(0, 10);
+
+    localStorage.setItem("galacticPulseScores", JSON.stringify(scores));
+
+    // Also update currentUser's best score
+    if (currentUser) {
+        if (this.score > currentUser.score) {
+            currentUser.score = this.score;
+            localStorage.setItem("currentUser", JSON.stringify(currentUser));
+        }
+    }
+}
+
     
     restart() {
         this.player.health = this.player.maxHealth;
