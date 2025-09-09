@@ -35,7 +35,7 @@ class GalacticPulse {
             maxHealth: 100,
             energy: 100,
             maxEnergy: 100,
-            speed: 5,
+            speed: 10, // Increased from 5 to 8 for faster movement
             angle: 0
         };
         
@@ -156,8 +156,8 @@ class GalacticPulse {
         this.bullets.push({
             x: this.player.x,
             y: this.player.y,
-            vx: Math.cos(this.player.angle) * 10,
-            vy: Math.sin(this.player.angle) * 10,
+            vx: Math.cos(this.player.angle) * 15, // Increased from 10 to 15 for faster bullets
+            vy: Math.sin(this.player.angle) * 15, // Increased from 10 to 15 for faster bullets
             size: 50, // Reduced size to make bullets more visible
             life: 100,
             animFrame: Math.floor(Math.random() * (maxFrame + 1)), // Use only available frames
@@ -175,7 +175,7 @@ class GalacticPulse {
                 y: this.player.y,
                 radius: 0,
                 maxRadius: 200,
-                speed: 8,
+                speed: 12, // Increased from 8 to 12 for faster pulse waves
                 damage: 50
             });
         }
@@ -189,7 +189,7 @@ class GalacticPulse {
             
             // Update bullet animation - only cycle through available frames
             bullet.animTimer++;
-            if (bullet.animTimer >= 5) {
+            if (bullet.animTimer >= 3) { // Reduced from 5 to 3 for faster animation
                 bullet.animTimer = 0;
                 bullet.animFrame = (bullet.animFrame + 1) % bullet.maxFrames;
             }
@@ -208,7 +208,7 @@ class GalacticPulse {
             
             // Update bullet animation
             bullet.animTimer++;
-            if (bullet.animTimer >= 5) {
+            if (bullet.animTimer >= 3) { // Reduced from 5 to 3 for faster enemy bullet animation
                 bullet.animTimer = 0;
                 bullet.animFrame = (bullet.animFrame + 1) % this.enemyBulletImages.length;
             }
@@ -221,7 +221,7 @@ class GalacticPulse {
     
     spawnEnemies() {
         this.enemySpawnTimer++;
-        if (this.enemySpawnTimer >= 120 - Math.min(this.score / 100, 60)) {
+        if (this.enemySpawnTimer >= 40 - Math.min(this.score / 100, 45)) { // Reduced from 120 to 90 for faster spawn
             this.enemySpawnTimer = 0;
             
             // Spawn from right side only
@@ -233,7 +233,7 @@ class GalacticPulse {
             
             // Calculate velocity toward player
             const angle = Math.atan2(this.player.y - y, this.player.x - x);
-            const speed = 1 + Math.random() * 2;
+            const speed = 2 + Math.random() * 3; // Increased from 1-3 to 2-5 for faster enemies
             
             this.enemies.push({
                 x: x,
@@ -256,7 +256,7 @@ class GalacticPulse {
             
             // Enemy firing logic
             enemy.fireTimer++;
-            if (enemy.fireTimer >= 120) { // Fire every 2 seconds
+            if (enemy.fireTimer >= 90) { // Reduced from 120 to 90 for faster but more manageable combat
                 enemy.fireTimer = 0;
                 this.fireEnemyBullet(enemy);
             }
@@ -323,9 +323,9 @@ class GalacticPulse {
     
     regenerateEnergy() {
         this.energyRegenTimer++;
-        if (this.energyRegenTimer >= 10) {
+        if (this.energyRegenTimer >= 5) { // Reduced from 10 to 5 for faster energy regen
             this.energyRegenTimer = 0;
-            this.player.energy = Math.min(this.player.maxEnergy, this.player.energy + 1);
+            this.player.energy = Math.min(this.player.maxEnergy, this.player.energy + 2); // Increased from 1 to 2 per regen
         }
     }
     
@@ -379,6 +379,7 @@ class GalacticPulse {
             
             if (distance < this.player.size + enemy.size) {
                 this.player.health -= 1;
+                this.player.health = Math.max(0, this.player.health); // Clamp health to 0
                 this.createExplosion(this.player.x, this.player.y, '#ff0000');
                 
                 if (this.player.health <= 0) {
@@ -396,6 +397,7 @@ class GalacticPulse {
             if (distance < this.player.size + bullet.size) {
                 this.enemyBullets.splice(bulletIndex, 1);
                 this.player.health -= 15;
+                this.player.health = Math.max(0, this.player.health); // Clamp health to 0
                 this.createExplosion(this.player.x, this.player.y, '#ff0000');
                 
                 if (this.player.health <= 0) {
