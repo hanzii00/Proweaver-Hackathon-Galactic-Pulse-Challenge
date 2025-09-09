@@ -148,3 +148,22 @@ canvas {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.5; }
 }
+#exitBtn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 18px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.6);
+            color: #00ffff;
+            font-weight: bold;
+            text-shadow: 0 0 6px #00ffff;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+        #exitBtn:hover {
+            background: rgba(0, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
