@@ -15,8 +15,8 @@ class AssetManager {
         };
 
         const soundAssets = {
-            backgroundMusic: 'assets/audio/Nebula Neon - Cm -129 BPM.wav',
-            laserSound: 'assets/audio/Nebula Neon - Cm -129 BPM.wav'
+            backgroundMusic: 'assets/audio/Nebula Neon - Cm - 129 BPM.wav',
+            laserSound: 'assets/audio/Nebula Neon - Cm - 129 BPM.wav'
         };
 
         this.totalAssets = Object.keys(imageAssets).length + Object.keys(soundAssets).length;

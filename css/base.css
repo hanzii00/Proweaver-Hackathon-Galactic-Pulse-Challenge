@@ -1,0 +1,144 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-neon: #00ffff;
+    --secondary-neon: #ff00ff;
+    --accent-neon: #ffff00;
+    --danger-neon: #ff4444;
+    --success-neon: #44ff44;
+    --bg-dark: #0a0a0f;
+    --bg-darker: #050507;
+    --text-light: #ffffff;
+    --text-dim: #cccccc;
+    --border-glow: #333366;
+}
+
+body {
+    font-family: 'Courier New', monospace;
+    background: var(--bg-dark);
+    color: var(--text-light);
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+/* Animated Star Field Background */
+.starfield {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-image: url('../assets/images/space.jpg');
+
+
+}
+
+
+.star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 2s infinite alternate;
+}
+
+@keyframes twinkle {
+    0% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
+
+/* Common Layout */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Common Headers */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 40px;
+}
+
+/* Common Buttons */
+.menu-btn, button {
+    background: transparent;
+    border: 2px solid var(--primary-neon);
+    color: var(--primary-neon);
+    padding: 15px 40px;
+    font-size: 1.1rem;
+    font-family: inherit;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.menu-btn:hover, button:hover {
+    background: var(--primary-neon);
+    color: var(--bg-dark);
+    box-shadow: 0 0 20px var(--primary-neon);
+    transform: translateY(-2px);
+}
+
+.secondary-btn {
+    border-color: var(--text-dim) !important;
+    color: var(--text-dim) !important;
+}
+
+.secondary-btn:hover {
+    background: var(--text-dim) !important;
+    color: var(--bg-dark) !important;
+    box-shadow: 0 0 20px var(--text-dim) !important;
+}
+
+.danger-btn {
+    border-color: var(--danger-neon) !important;
+    color: var(--danger-neon) !important;
+}
+
+.danger-btn:hover {
+    background: var(--danger-neon) !important;
+    color: var(--bg-dark) !important;
+    box-shadow: 0 0 20px var(--danger-neon) !important;
+}
+
+.back-btn {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+}
+
+/* Dark theme variant */
+body.dark-theme {
+    --primary-neon: #4444ff;
+    --secondary-neon: #8844ff;
+    --accent-neon: #44ffff;
+    --bg-dark: #000000;
+    --bg-darker: #111111;
+    --border-glow: #222244;
+}
+
+/* Responsive base */
+@media (max-width: 768px) {
+    .page-header {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .container {
+        padding: 10px;
+    }
+}
