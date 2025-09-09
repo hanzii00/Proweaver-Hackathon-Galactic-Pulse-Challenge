@@ -10,13 +10,13 @@ class AssetManager {
     async loadAssets() {
         // Define assets to load
         const imageAssets = {
-            player: 'assets/images/Ship1/Ship1.png',
-            enemy: 'assets/images/Ship2/Ship2.png'
+            player: '../assets/images/Ship1/Ship1.png',
+            enemy: '../assets/images/Ship2/Ship2.png'
         };
 
         const soundAssets = {
-            backgroundMusic: 'assets/audio/Nebula Neon - Cm - 129 BPM.wav',
-            laserSound: 'assets/audio/Nebula Neon - Cm - 129 BPM.wav'
+            backgroundMusic: '../assets/audio/Nebula Neon - Cm - 129 BPM.wav',
+            laserSound: '../assets/audio/Nebula Neon - Cm - 129 BPM.wav'
         };
 
         this.totalAssets = Object.keys(imageAssets).length + Object.keys(soundAssets).length;
@@ -105,7 +105,9 @@ class AssetManager {
 }
 
 // Initialize the game
-document.addEventListener('DOMContentLoaded', async () => {
+
+// Expose a function to start the game when called (after scripts are loaded)
+window.startGalacticPulseGame = async function() {
     // Show loading screen
     const loadingDiv = document.createElement('div');
     loadingDiv.className = 'loading';
@@ -139,7 +141,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.body.removeChild(loadingDiv);
         document.body.innerHTML += '<div style="color: red; text-align: center; margin-top: 50px;">Failed to load game. Please refresh and try again.</div>';
     }
-});
+}
 
 function createStarfield() {
     const starfield = document.getElementById('starfield');
