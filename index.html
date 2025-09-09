@@ -7,17 +7,17 @@
     <meta name="description" content="Survive the galactic waves in this thrilling space adventure">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/style.css">
+    
 </head>
 <body>
     <div class="starfield" id="starfield"></div>
-    
     <!-- Username Entry Screen -->
     <div class="container" id="usernameScreen">
         <header class="game-header">
             <h1 class="game-title">Galactic Pulse</h1>
             <p class="game-subtitle">Enter your callsign, pilot</p>
         </header>
-
         <div class="username-form">
             <div class="input-group">
                 <label for="usernameInput" class="input-label">PILOT CALLSIGN</label>
@@ -28,7 +28,6 @@
             <p class="username-hint">Choose your pilot identity for the galactic logs</p>
         </div>
     </div>
-
     <!-- Main Menu Screen (initially hidden) -->
     <div class="container hidden" id="mainMenuScreen">
         <header class="game-header">
@@ -39,9 +38,8 @@
                 <span class="pilot-name" id="pilotName"></span>
             </div>
         </header>
-
         <nav class="main-menu">
-            <button class="menu-btn" onclick="location.href='game.html'">Start Mission</button>
+            <button class="menu-btn" id="startMissionBtn" type="button">Start Mission</button>
             <button class="menu-btn" onclick="location.href='howtoplay.html'">Flight Manual</button>
             <button class="menu-btn" onclick="location.href='scores.html'">Mission Scores</button>
             <button class="menu-btn" onclick="location.href='settings.html'">Ship Config</button>
@@ -51,5 +49,7 @@
     </div>
 
     <script src="js/index.js"></script>
+
+
 </body>
 </html>
