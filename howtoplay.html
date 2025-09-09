@@ -6,16 +6,17 @@
     <title>Galactic Pulse - How to Play</title>
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/tutorial.css">
+            <link rel="icon" type="image/png" href="assets/images/favicon.png">
+
 </head>
 <body>
     <div class="starfield" id="starfield"></div>
-    
+
     <div class="container">
         <header class="page-header">
             <h1>How to Play</h1>
             <button class="back-btn" onclick="location.href='index.html'">← Back to Menu</button>
         </header>
-
         <div class="tutorial-content">
             <section class="tutorial-section">
                 <h2>Controls</h2>
@@ -38,20 +39,32 @@
                     </div>
                 </div>
             </section>
-
             <section class="tutorial-section">
                 <h2>Objective</h2>
                 <p>Survive as long as possible while destroying enemies and avoiding collisions. Collect power-ups to enhance your abilities!</p>
             </section>
-
             <section class="tutorial-section">
                 <h2>Enemies</h2>
                 <div class="enemy-types">
                     <div class="enemy-item">
-                        <div class="enemy-icon asteroid"></div>
+                        <div class="enemy-icon scout"></div>
                         <div class="enemy-info">
-                            <h3>Asteroids</h3>
-                            <p>Slow moving but destructible. Worth 10 points.</p>
+                            <h3>Fast Scouts</h3>
+                            <p>Fast moving green aircrafts. Worth 20 points.</p>
+                        </div>
+                    </div>
+                    <div class="enemy-item">
+                        <div class="enemy-icon tank"></div>
+                        <div class="enemy-info">
+                            <h3>Heavy Tanks</h3>
+                            <p>Slow moving yellow tanks. Worth 50 points.</p>
+                        </div>
+                    </div>
+                    <div class="enemy-item">
+                        <div class="enemy-icon boss"></div>
+                        <div class="enemy-info">
+                            <h3>Boss</h3>
+                            <p>Powerful red boss. Worth 100 points.</p>
                         </div>
                     </div>
                     <div class="enemy-item">
@@ -63,7 +76,6 @@
                     </div>
                 </div>
             </section>
-
             <section class="tutorial-section">
                 <h2>Power-ups</h2>
                 <div class="powerup-types">
@@ -92,7 +104,6 @@
             </section>
         </div>
     </div>
-
     <script src="js/main.js"></script>
 </body>
 </html>
