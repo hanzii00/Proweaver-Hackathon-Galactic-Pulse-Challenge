@@ -62,3 +62,107 @@
 .scores-actions {
     text-align: center;
 }
+.scores-content {
+            max-width: 600px;
+            width: 100%;
+        }
+        .leaderboard {
+            margin-bottom: 40px;
+        }
+        .leaderboard h2 {
+            color: var(--primary-neon);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+        .scores-list {
+            border: 1px solid var(--border-glow);
+            background: rgba(0, 0, 0, 0.3);
+        }
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+            border-bottom: 1px solid var(--border-glow);
+        }
+        .score-item:last-child {
+            border-bottom: none;
+        }
+        .score-rank {
+            font-weight: bold;
+            color: var(--accent-neon);
+            min-width: 40px;
+        }
+        .score-rank.gold {
+            color: #ffd700;
+        }
+        .score-rank.silver {
+            color: #c0c0c0;
+        }
+        .score-rank.bronze {
+            color: #cd7f32;
+        }
+        .score-name {
+            flex: 1;
+            margin-left: 20px;
+        }
+        .score-value {
+            font-weight: bold;
+            color: var(--primary-neon);
+        }
+        .scores-actions {
+            text-align: center;
+        }
+        /* Galactic Popup Modal */
+        .galactic-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: rgba(0, 0, 20, 0.9);
+            border: 2px solid var(--primary-neon);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 0 20px var(--primary-neon);
+        }
+        .modal-content h3 {
+            color: var(--primary-neon);
+            margin-bottom: 15px;
+        }
+        .modal-content p {
+            color: var(--text-dim);
+            margin-bottom: 20px;
+        }
+        .modal-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .confirm-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .cancel-btn {
+            background: var(--bg-darker);
+            color: var(--primary-neon);
+            border: 1px solid var(--primary-neon);
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
