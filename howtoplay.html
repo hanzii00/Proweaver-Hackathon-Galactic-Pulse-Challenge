@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galactic Pulse - How to Play</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/tutorial.css">
+</head>
+<body>
+    <div class="starfield" id="starfield"></div>
+    
+    <div class="container">
+        <header class="page-header">
+            <h1>How to Play</h1>
+            <button class="back-btn" onclick="location.href='index.html'">← Back to Menu</button>
+        </header>
+
+        <div class="tutorial-content">
+            <section class="tutorial-section">
+                <h2>Controls</h2>
+                <div class="controls-grid">
+                    <div class="control-item">
+                        <span class="key">←→↑↓</span>
+                        <span class="description">Arrow keys to move</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="key">WASD</span>
+                        <span class="description">Alternative movement</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="key">SPACE</span>
+                        <span class="description">Shoot lasers</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="key">P</span>
+                        <span class="description">Pause game</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="tutorial-section">
+                <h2>Objective</h2>
+                <p>Survive as long as possible while destroying enemies and avoiding collisions. Collect power-ups to enhance your abilities!</p>
+            </section>
+
+            <section class="tutorial-section">
+                <h2>Enemies</h2>
+                <div class="enemy-types">
+                    <div class="enemy-item">
+                        <div class="enemy-icon asteroid"></div>
+                        <div class="enemy-info">
+                            <h3>Asteroids</h3>
+                            <p>Slow moving but destructible. Worth 10 points.</p>
+                        </div>
+                    </div>
+                    <div class="enemy-item">
+                        <div class="enemy-icon pulse"></div>
+                        <div class="enemy-info">
+                            <h3>Energy Pulses</h3>
+                            <p>Fast moving energy balls. Worth 25 points.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="tutorial-section">
+                <h2>Power-ups</h2>
+                <div class="powerup-types">
+                    <div class="powerup-item">
+                        <div class="powerup-icon health"></div>
+                        <div class="powerup-info">
+                            <h3>Health</h3>
+                            <p>Restores one life</p>
+                        </div>
+                    </div>
+                    <div class="powerup-item">
+                        <div class="powerup-icon shield"></div>
+                        <div class="powerup-info">
+                            <h3>Shield</h3>
+                            <p>Temporary invincibility</p>
+                        </div>
+                    </div>
+                    <div class="powerup-item">
+                        <div class="powerup-icon speed"></div>
+                        <div class="powerup-info">
+                            <h3>Speed Boost</h3>
+                            <p>Faster movement</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

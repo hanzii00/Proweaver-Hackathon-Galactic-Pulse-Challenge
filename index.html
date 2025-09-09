@@ -11,18 +11,42 @@
 <body>
     <div class="starfield" id="starfield"></div>
     
-    <div class="container">
+    <!-- Username Entry Screen -->
+    <div class="container" id="usernameScreen">
+        <header class="game-header">
+            <h1 class="game-title">Galactic Pulse</h1>
+            <p class="game-subtitle">Enter your callsign, pilot</p>
+        </header>
+
+        <div class="username-form">
+            <div class="input-group">
+                <label for="usernameInput" class="input-label">PILOT CALLSIGN</label>
+                <input type="text" id="usernameInput" class="username-input" placeholder="Enter your name..." maxlength="20" autocomplete="off">
+                <div class="input-glow"></div>
+            </div>
+            <button class="menu-btn" id="enterBtn" onclick="enterGame()">Enter Cockpit</button>
+            <p class="username-hint">Choose your pilot identity for the galactic logs</p>
+        </div>
+    </div>
+
+    <!-- Main Menu Screen (initially hidden) -->
+    <div class="container hidden" id="mainMenuScreen">
         <header class="game-header">
             <h1 class="game-title">Galactic Pulse</h1>
             <p class="game-subtitle">Survive the cosmic waves</p>
+            <div class="pilot-info">
+                <span class="pilot-label">PILOT:</span>
+                <span class="pilot-name" id="pilotName"></span>
+            </div>
         </header>
 
         <nav class="main-menu">
-            <button class="menu-btn" onclick="location.href='game.html'">Start Game</button>
-            <button class="menu-btn" onclick="location.href='howtoplay.html'">How to Play</button>
-            <button class="menu-btn" onclick="location.href='score.html'">High Scores</button>
-            <button class="menu-btn" onclick="location.href='settings.html'">Settings</button>
+            <button class="menu-btn" onclick="location.href='game.html'">Start Mission</button>
+            <button class="menu-btn" onclick="location.href='howtoplay.html'">Flight Manual</button>
+            <button class="menu-btn" onclick="location.href='scores.html'">Mission Scores</button>
+            <button class="menu-btn" onclick="location.href='settings.html'">Ship Config</button>
             <button class="menu-btn" onclick="location.href='about.html'">About</button>
+            <button class="menu-btn" onclick="changePilot()">Change Pilot</button>
         </nav>
     </div>
 

@@ -1,1 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galactic Pulse - Settings</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/settings.css">
+</head>
+<body>
+    <div class="starfield" id="starfield"></div>
+    
+    <div class="container">
+        <header class="page-header">
+            <h1>Settings</h1>
+            <button class="back-btn" onclick="location.href='index.html'">← Back to Menu</button>
+        </header>
 
+        <div class="settings-content">
+            <section class="setting-section">
+                <h2>Difficulty</h2>
+                <div class="setting-options">
+                    <label class="radio-option">
+                        <input type="radio" name="difficulty" value="easy" id="difficultyEasy">
+                        <span>Easy</span>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="difficulty" value="normal" id="difficultyNormal" checked>
+                        <span>Normal</span>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="difficulty" value="hard" id="difficultyHard">
+                        <span>Hard</span>
+                    </label>
+                </div>
+            </section>
+
+            <section class="setting-section">
+                <h2>Audio</h2>
+                <div class="setting-options">
+                    <label class="toggle-option">
+                        <input type="checkbox" id="soundToggle" checked>
+                        <span class="toggle-slider"></span>
+                        <span>Sound Effects</span>
+                    </label>
+                    <label class="toggle-option">
+                        <input type="checkbox" id="musicToggle" checked>
+                        <span class="toggle-slider"></span>
+                        <span>Background Music</span>
+                    </label>
+                </div>
+            </section>
+
+        
+            <div class="settings-actions">
+                <button onclick="saveSettings()">Save Settings</button>
+                <button class="secondary-btn" onclick="resetSettings()">Reset to Default</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/settings.js"></script>
+</body>
+</html>
