@@ -1,0 +1,43 @@
+.game-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.game-title {
+    font-size: 4rem;
+    background: linear-gradient(45deg, var(--primary-neon), var(--secondary-neon));
+    background-clip: text; /* add unprefixed */
+    -webkit-background-clip: text;
+    color: transparent; /* fallback */
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 30px var(--primary-neon);
+    margin-bottom: 10px;
+    animation: pulse-glow 2s infinite alternate;
+}
+
+
+@keyframes pulse-glow {
+    0% { filter: brightness(1); }
+    100% { filter: brightness(1.2); }
+}
+
+.game-subtitle {
+    font-size: 1.2rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.main-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .game-title {
+        font-size: 2.5rem;
+    }
+}
