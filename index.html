@@ -48,55 +48,107 @@
             <button class="menu-btn" onclick="changePilot()">Change Pilot</button>
         </nav>
     </div>
+    
+    <!-- Game Screen (initially hidden) -->
+    <div class="game-container hidden" id="gameScreen">
+        <canvas id="gameCanvas"></canvas>
+        
+        <div class="ui">
+            <div class="health-bar">
+                <div class="health-fill" id="healthBar"></div>
+            </div>
+            <div class="energy-bar">
+                <div class="energy-fill" id="energyBar"></div>
+            </div>
+            <div class="score" id="score">Score: 0</div>
+        </div>
+        
+        <div class="game-over" id="gameOver">
+            <div>GAME OVER</div>
+            <div style="font-size: 24px; margin-top: 20px;">Press SPACE to restart</div>
+        </div>
+        
+        <div class="controls">
+            WASD/Arrow Keys: Move | Mouse: Aim & Shoot | SPACE: Pulse Wave | R: Reload
+        </div>
+    </div>
+    
     <!-- Preload images (optional, for performance) -->
     <div style="display: none;">
         <img id="playerShip" src="../hanz15-bacus-Proweaver-Hackathon---Galactic-Pulse-Challenge/assets/images/Ship1/Ship1.png" alt="Player Ship">
         <img id="enemyShip" src="../hanz15-bacus-Proweaver-Hackathon---Galactic-Pulse-Challenge/assets/images/Ship2/Ship2.png" alt="Enemy Ship">
     </div>
     <!-- Audio elements (optional, for menu music/effects) -->
-    <audio id="laserSound" src="../hanz15-bacus-Proweaver-Hackathon---Galactic-Pulse-Challenge/assets/audio/Nebula Neon - Cm - 129 BPM.wav"></audio>
+    <audio id="backgroundMusic" src="assets/audio/Nebula Neon - Cm - 129 BPM.wav" loop preload="auto"></audio>
     <script src="js/main.js"></script>
+    <script src="js/entities.js"></script>
+    <script src="js/game.js"></script>
     <script>
-    // Dynamically load all game scripts in order when Start Mission is clicked
+    let gameInstance = null;
+    
+    // Function to start the game
+    function startGalacticPulseGame() {
+        // Hide menu and username screens
+        const menu = document.getElementById('mainMenuScreen');
+        const user = document.getElementById('usernameScreen');
+        const gameScreen = document.getElementById('gameScreen');
+        
+        if (menu) menu.classList.add('hidden');
+        if (user) user.classList.add('hidden');
+        if (gameScreen) gameScreen.classList.remove('hidden');
+        
+        // Initialize the game
+        if (!gameInstance) {
+            gameInstance = new GalacticPulse();
+        }
+    }
+    
+    // Set up the start mission button
     document.addEventListener('DOMContentLoaded', function() {
-        var startBtn = document.getElementById('startMissionBtn');
+        const startBtn = document.getElementById('startMissionBtn');
         if (startBtn) {
-            startBtn.addEventListener('click', function() {
-                // Hide menu and username screens
-                var menu = document.getElementById('mainMenuScreen');
-                var user = document.getElementById('usernameScreen');
-                if (menu) menu.classList.add('hidden');
-                if (user) user.classList.add('hidden');
-                // Helper to load scripts in order
-                function loadScript(src, cb) {
-                    var s = document.createElement('script');
-                    s.src = src;
-                    s.onload = cb;
-                    document.body.appendChild(s);
-                }
-                loadScript('js/entities.js', function() {
-                    loadScript('js/game.js', function() {
-                        loadScript('js/index.js', function() {
-                            if (window.startGalacticPulseGame) window.startGalacticPulseGame();
-                        });
-                    });
-                });
-            });
+            startBtn.addEventListener('click', startGalacticPulseGame);
         }
     });
     </script>
     <script>
 document.addEventListener('DOMContentLoaded', function() {
     var bgm = document.getElementById('backgroundMusic');
+    
+    // Set volume and preload
+    if (bgm) {
+        bgm.volume = 0.5; // Set volume to 50%
+        bgm.preload = 'auto';
+        console.log('Audio element found:', bgm.src);
+    } else {
+        console.error('Background music element not found!');
+    }
+    
     function enableAudio() {
         if (bgm) {
-            bgm.play().catch(()=>{});
+            console.log('Attempting to play audio...');
+            bgm.play().then(() => {
+                console.log('Audio started playing successfully');
+            }).catch((error) => {
+                console.error('Error playing audio:', error);
+                // Try to load and play again
+                bgm.load();
+                setTimeout(() => {
+                    bgm.play().catch(err => console.error('Retry failed:', err));
+                }, 100);
+            });
         }
         window.removeEventListener('click', enableAudio);
         window.removeEventListener('keydown', enableAudio);
     }
+    
+    // Add multiple event listeners to ensure audio starts
     window.addEventListener('click', enableAudio);
     window.addEventListener('keydown', enableAudio);
+    window.addEventListener('touchstart', enableAudio);
+    
+    // Also try to enable audio when user interacts with specific elements
+    document.addEventListener('click', enableAudio, { once: true });
 });
 </script>
 </body>
