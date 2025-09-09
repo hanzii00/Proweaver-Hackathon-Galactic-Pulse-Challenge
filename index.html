@@ -79,7 +79,7 @@
         <img id="enemyShip" src="../hanz15-bacus-Proweaver-Hackathon---Galactic-Pulse-Challenge/assets/images/Ship2/Ship2.png" alt="Enemy Ship">
     </div>
     <!-- Audio elements (optional, for menu music/effects) -->
-    <audio id="laserSound" src="../hanz15-bacus-Proweaver-Hackathon---Galactic-Pulse-Challenge/assets/audio/Nebula Neon - Cm - 129 BPM.wav"></audio>
+    <audio id="backgroundMusic" src="assets/audio/Nebula Neon - Cm - 129 BPM.wav" loop preload="auto"></audio>
     <script src="js/main.js"></script>
     <script src="js/entities.js"></script>
     <script src="js/game.js"></script>
@@ -114,15 +114,41 @@
     <script>
 document.addEventListener('DOMContentLoaded', function() {
     var bgm = document.getElementById('backgroundMusic');
+    
+    // Set volume and preload
+    if (bgm) {
+        bgm.volume = 0.5; // Set volume to 50%
+        bgm.preload = 'auto';
+        console.log('Audio element found:', bgm.src);
+    } else {
+        console.error('Background music element not found!');
+    }
+    
     function enableAudio() {
         if (bgm) {
-            bgm.play().catch(()=>{});
+            console.log('Attempting to play audio...');
+            bgm.play().then(() => {
+                console.log('Audio started playing successfully');
+            }).catch((error) => {
+                console.error('Error playing audio:', error);
+                // Try to load and play again
+                bgm.load();
+                setTimeout(() => {
+                    bgm.play().catch(err => console.error('Retry failed:', err));
+                }, 100);
+            });
         }
         window.removeEventListener('click', enableAudio);
         window.removeEventListener('keydown', enableAudio);
     }
+    
+    // Add multiple event listeners to ensure audio starts
     window.addEventListener('click', enableAudio);
     window.addEventListener('keydown', enableAudio);
+    window.addEventListener('touchstart', enableAudio);
+    
+    // Also try to enable audio when user interacts with specific elements
+    document.addEventListener('click', enableAudio, { once: true });
 });
 </script>
 </body>
