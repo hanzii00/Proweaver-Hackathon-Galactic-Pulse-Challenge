@@ -4,15 +4,15 @@ class GalacticPulse {
         this.ctx = this.canvas.getContext('2d');
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
-        
+
         // Load images
         this.playerImage = new Image();
         this.playerImage.src = 'assets/images/Ship5/Ship5.png';
-        
+
         // Enemy ship image
         this.enemyImage = new Image();
         this.enemyImage.src = 'assets/images/Ship1/Ship1.png';
-        
+
         // Enemy bullet images (Shot1) - only 4 images available
         this.enemyBulletImages = [];
         for (let i = 1; i <= 4; i++) {
@@ -20,25 +20,25 @@ class GalacticPulse {
             bulletImg.src = `assets/images/Shots/Shot1/shot1_${i}.png`;
             this.enemyBulletImages.push(bulletImg);
         }
-        
+
         this.bulletImages = [];
-        this.bulletImageLoadIndex = 0; // Track which image to load next
-        
+        this.bulletImageLoadIndex = 0;
+
         // Load first bullet image
         this.loadNextBulletImage();
-        
+
         this.player = {
             x: this.canvas.width / 2,
             y: this.canvas.height / 2,
-            size: 50, // Increased size to accommodate ship image
+            size: 50,
             health: 100,
             maxHealth: 100,
             energy: 100,
             maxEnergy: 100,
-            speed: 10, // Increased from 5 to 8 for faster movement
+            speed: 10,
             angle: 0
         };
-        
+
         this.bullets = [];
         this.enemyBullets = [];
         this.enemies = [];
@@ -46,17 +46,18 @@ class GalacticPulse {
         this.particles = [];
         this.score = 0;
         this.gameRunning = true;
+        this.paused = false;
         this.keys = {};
         this.mouse = { x: 0, y: 0 };
-        
+
         this.enemySpawnTimer = 0;
         this.energyRegenTimer = 0;
-        
+
         this.initEventListeners();
         this.createStarfield();
         this.gameLoop();
     }
-    
+
     initEventListeners() {
         document.addEventListener('keydown', (e) => {
             this.keys[e.key.toLowerCase()] = true;
@@ -68,42 +69,65 @@ class GalacticPulse {
                     this.restart();
                 }
             }
+            if (e.key.toLowerCase() === 'p') {
+                e.preventDefault();
+                this.togglePause();
+            }
         });
-        
+
         document.addEventListener('keyup', (e) => {
             this.keys[e.key.toLowerCase()] = false;
         });
-        
+
         document.addEventListener('mousemove', (e) => {
             this.mouse.x = e.clientX;
             this.mouse.y = e.clientY;
         });
-        
+
         document.addEventListener('mousedown', (e) => {
-            if (this.gameRunning) {
+            if (this.gameRunning && !this.paused) {
                 this.fireBullet();
             }
         });
-        
+
         window.addEventListener('resize', () => {
             this.canvas.width = window.innerWidth;
             this.canvas.height = window.innerHeight;
         });
+
+        // Pause menu button event listeners
+        document.getElementById('resumeBtn').addEventListener('click', () => {
+            this.togglePause();
+        });
+
+        document.getElementById('restartBtn').addEventListener('click', () => {
+            this.restart();
+            this.togglePause();
+        });
+
+        document.getElementById('exitPauseBtn').addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
     }
-    
+
+    togglePause() {
+        this.paused = !this.paused;
+        const pauseMenu = document.getElementById('pauseMenu');
+        pauseMenu.style.display = this.paused ? 'flex' : 'none';
+    }
+
     loadNextBulletImage() {
         if (this.bulletImageLoadIndex < 5) {
             const bulletImg = new Image();
             bulletImg.onload = () => {
                 this.bulletImageLoadIndex++;
-                // Load next image after a delay
                 setTimeout(() => this.loadNextBulletImage(), 1000);
             };
             bulletImg.src = `assets/images/Shots/Shot5/shot5_${this.bulletImageLoadIndex + 1}.png`;
             this.bulletImages.push(bulletImg);
         }
     }
-    
+
     createStarfield() {
         const starfield = document.getElementById('starfield');
         for (let i = 0; i < 100; i++) {
@@ -117,10 +141,10 @@ class GalacticPulse {
             starfield.appendChild(star);
         }
     }
-    
+
     update() {
-        if (!this.gameRunning) return;
-        
+        if (!this.gameRunning || this.paused) return;
+
         this.updatePlayer();
         this.updateBullets();
         this.updateEnemyBullets();
@@ -132,41 +156,37 @@ class GalacticPulse {
         this.checkCollisions();
         this.updateUI();
     }
-    
+
     updatePlayer() {
-        // Movement
         if (this.keys['w'] || this.keys['arrowup']) this.player.y -= this.player.speed;
         if (this.keys['s'] || this.keys['arrowdown']) this.player.y += this.player.speed;
         if (this.keys['a'] || this.keys['arrowleft']) this.player.x -= this.player.speed;
         if (this.keys['d'] || this.keys['arrowright']) this.player.x += this.player.speed;
-        
-        // Keep player in bounds
+
         this.player.x = Math.max(this.player.size, Math.min(this.canvas.width - this.player.size, this.player.x));
         this.player.y = Math.max(this.player.size, Math.min(this.canvas.height - this.player.size, this.player.y));
-        
-        // Calculate angle to mouse
+
         this.player.angle = Math.atan2(this.mouse.y - this.player.y, this.mouse.x - this.player.x);
     }
-    
+
     fireBullet() {
-        // Only use available loaded images
         const availableImages = this.bulletImages.filter(img => img.complete);
         const maxFrame = Math.max(0, availableImages.length - 1);
-        
+
         this.bullets.push({
             x: this.player.x,
             y: this.player.y,
-            vx: Math.cos(this.player.angle) * 15, // Increased from 10 to 15 for faster bullets
-            vy: Math.sin(this.player.angle) * 15, // Increased from 10 to 15 for faster bullets
-            size: 50, // Reduced size to make bullets more visible
+            vx: Math.cos(this.player.angle) * 15,
+            vy: Math.sin(this.player.angle) * 15,
+            size: 50,
             life: 100,
-            animFrame: Math.floor(Math.random() * (maxFrame + 1)), // Use only available frames
-            animTimer: Math.floor(Math.random() * 5), // Random starting timer offset
+            animFrame: Math.floor(Math.random() * (maxFrame + 1)),
+            animTimer: Math.floor(Math.random() * 5),
             angle: this.player.angle,
-            maxFrames: maxFrame + 1 // Store how many frames this bullet can use
+            maxFrames: maxFrame + 1
         });
     }
-    
+
     firePulseWave() {
         if (this.player.energy >= 30) {
             this.player.energy -= 30;
@@ -175,108 +195,99 @@ class GalacticPulse {
                 y: this.player.y,
                 radius: 0,
                 maxRadius: 200,
-                speed: 12, // Increased from 8 to 12 for faster pulse waves
+                speed: 12,
                 damage: 50
             });
         }
     }
-    
+
     updateBullets() {
         this.bullets = this.bullets.filter(bullet => {
             bullet.x += bullet.vx;
             bullet.y += bullet.vy;
             bullet.life--;
-            
-            // Update bullet animation - only cycle through available frames
+
             bullet.animTimer++;
-            if (bullet.animTimer >= 3) { // Reduced from 5 to 3 for faster animation
+            if (bullet.animTimer >= 3) {
                 bullet.animTimer = 0;
                 bullet.animFrame = (bullet.animFrame + 1) % bullet.maxFrames;
             }
-            
-            return bullet.life > 0 && 
+
+            return bullet.life > 0 &&
                    bullet.x > 0 && bullet.x < this.canvas.width &&
                    bullet.y > 0 && bullet.y < this.canvas.height;
         });
     }
-    
+
     updateEnemyBullets() {
         this.enemyBullets = this.enemyBullets.filter(bullet => {
             bullet.x += bullet.vx;
             bullet.y += bullet.vy;
             bullet.life--;
-            
-            // Update bullet animation
+
             bullet.animTimer++;
-            if (bullet.animTimer >= 3) { // Reduced from 5 to 3 for faster enemy bullet animation
+            if (bullet.animTimer >= 3) {
                 bullet.animTimer = 0;
                 bullet.animFrame = (bullet.animFrame + 1) % this.enemyBulletImages.length;
             }
-            
-            return bullet.life > 0 && 
+
+            return bullet.life > 0 &&
                    bullet.x > 0 && bullet.x < this.canvas.width &&
                    bullet.y > 0 && bullet.y < this.canvas.height;
         });
     }
-    
+
     spawnEnemies() {
         this.enemySpawnTimer++;
-        if (this.enemySpawnTimer >= 40 - Math.min(this.score / 100, 45)) { // Reduced from 120 to 90 for faster spawn
+        if (this.enemySpawnTimer >= 40 - Math.min(this.score / 100, 45)) {
             this.enemySpawnTimer = 0;
-            
-            // Spawn from right side only
-            let x, y;
-            
-            // Right side spawn
-            x = this.canvas.width + 20;
-            y = Math.random() * this.canvas.height;
-            
-            // Calculate velocity toward player
+
+            let x = this.canvas.width + 20;
+            let y = Math.random() * this.canvas.height;
+
             const angle = Math.atan2(this.player.y - y, this.player.x - x);
-            const speed = 2 + Math.random() * 3; // Increased from 1-3 to 2-5 for faster enemies
-            
+            const speed = 2 + Math.random() * 3;
+
             this.enemies.push({
                 x: x,
                 y: y,
                 vx: Math.cos(angle) * speed,
                 vy: Math.sin(angle) * speed,
-                size: 25, // Increased size for ship image
+                size: 25,
                 health: 30 + Math.random() * 20,
                 maxHealth: 50,
                 type: Math.random() < 0.8 ? 'basic' : 'heavy',
-                fireTimer: Math.floor(Math.random() * 60) // Random initial fire delay
+                fireTimer: Math.floor(Math.random() * 60)
             });
         }
     }
-    
+
     updateEnemies() {
         this.enemies.forEach(enemy => {
             enemy.x += enemy.vx;
             enemy.y += enemy.vy;
-            
-            // Enemy firing logic
+
             enemy.fireTimer++;
-            if (enemy.fireTimer >= 90) { // Reduced from 120 to 90 for faster but more manageable combat
+            if (enemy.fireTimer >= 90) {
                 enemy.fireTimer = 0;
                 this.fireEnemyBullet(enemy);
             }
         });
-        
-        this.enemies = this.enemies.filter(enemy => 
-            enemy.health > 0 && 
+
+        this.enemies = this.enemies.filter(enemy =>
+            enemy.health > 0 &&
             enemy.x > -50 && enemy.x < this.canvas.width + 50 &&
             enemy.y > -50 && enemy.y < this.canvas.height + 50
         );
     }
-    
+
     fireEnemyBullet(enemy) {
-        // Calculate angle toward player
         const angle = Math.atan2(this.player.y - enemy.y, this.player.x - enemy.x);
-        
+
         this.enemyBullets.push({
             x: enemy.x,
             y: enemy.y,
-            vx: Math.cos(angle) * 3, // Slower than player bullets
+            vx: Math.cos(angle) * 3,
             vy: Math.sin(angle) * 3,
             size: 20,
             life: 150,
@@ -285,15 +296,15 @@ class GalacticPulse {
             angle: angle
         });
     }
-    
+
     updatePulseWaves() {
         this.pulseWaves.forEach(wave => {
             wave.radius += wave.speed;
         });
-        
+
         this.pulseWaves = this.pulseWaves.filter(wave => wave.radius < wave.maxRadius);
     }
-    
+
     updateParticles() {
         this.particles.forEach(particle => {
             particle.x += particle.vx;
@@ -301,10 +312,10 @@ class GalacticPulse {
             particle.life--;
             particle.alpha = particle.life / particle.maxLife;
         });
-        
+
         this.particles = this.particles.filter(particle => particle.life > 0);
     }
-    
+
     createExplosion(x, y, color = '#ff6600') {
         for (let i = 0; i < 10; i++) {
             this.particles.push({
@@ -320,28 +331,27 @@ class GalacticPulse {
             });
         }
     }
-    
+
     regenerateEnergy() {
         this.energyRegenTimer++;
-        if (this.energyRegenTimer >= 5) { // Reduced from 10 to 5 for faster energy regen
+        if (this.energyRegenTimer >= 5) {
             this.energyRegenTimer = 0;
-            this.player.energy = Math.min(this.player.maxEnergy, this.player.energy + 2); // Increased from 1 to 2 per regen
+            this.player.energy = Math.min(this.player.maxEnergy, this.player.energy + 2);
         }
     }
-    
+
     checkCollisions() {
-        // Bullet vs Enemy
         this.bullets.forEach((bullet, bulletIndex) => {
             this.enemies.forEach((enemy, enemyIndex) => {
                 const dx = bullet.x - enemy.x;
                 const dy = bullet.y - enemy.y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
-                
+
                 if (distance < bullet.size + enemy.size) {
                     this.bullets.splice(bulletIndex, 1);
                     enemy.health -= 25;
                     this.createExplosion(enemy.x, enemy.y, '#ffff00');
-                    
+
                     if (enemy.health <= 0) {
                         this.enemies.splice(enemyIndex, 1);
                         this.score += 10;
@@ -350,18 +360,17 @@ class GalacticPulse {
                 }
             });
         });
-        
-        // Pulse Wave vs Enemy
+
         this.pulseWaves.forEach(wave => {
             this.enemies.forEach((enemy, enemyIndex) => {
                 const dx = wave.x - enemy.x;
                 const dy = wave.y - enemy.y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
-                
+
                 if (distance <= wave.radius && distance >= wave.radius - 10) {
                     enemy.health -= wave.damage;
                     this.createExplosion(enemy.x, enemy.y, '#00ffff');
-                    
+
                     if (enemy.health <= 0) {
                         this.enemies.splice(enemyIndex, 1);
                         this.score += 15;
@@ -370,95 +379,84 @@ class GalacticPulse {
                 }
             });
         });
-        
-        // Player vs Enemy
+
         this.enemies.forEach(enemy => {
             const dx = this.player.x - enemy.x;
             const dy = this.player.y - enemy.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
-            
+
             if (distance < this.player.size + enemy.size) {
                 this.player.health -= 1;
-                this.player.health = Math.max(0, this.player.health); // Clamp health to 0
+                this.player.health = Math.max(0, this.player.health);
                 this.createExplosion(this.player.x, this.player.y, '#ff0000');
-                
+
                 if (this.player.health <= 0) {
                     this.gameOver();
                 }
             }
         });
-        
-        // Enemy Bullets vs Player
+
         this.enemyBullets.forEach((bullet, bulletIndex) => {
             const dx = this.player.x - bullet.x;
             const dy = this.player.y - bullet.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
-            
+
             if (distance < this.player.size + bullet.size) {
                 this.enemyBullets.splice(bulletIndex, 1);
                 this.player.health -= 15;
-                this.player.health = Math.max(0, this.player.health); // Clamp health to 0
+                this.player.health = Math.max(0, this.player.health);
                 this.createExplosion(this.player.x, this.player.y, '#ff0000');
-                
+
                 if (this.player.health <= 0) {
                     this.gameOver();
                 }
             }
         });
     }
-    
+
     updateUI() {
         document.getElementById('healthBar').style.width = (this.player.health / this.player.maxHealth) * 100 + '%';
         document.getElementById('energyBar').style.width = (this.player.energy / this.player.maxEnergy) * 100 + '%';
         document.getElementById('score').textContent = `Score: ${this.score}`;
     }
-    
+
     render() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        
-        // Draw player
+
         this.ctx.save();
         this.ctx.translate(this.player.x, this.player.y);
-        // Removed rotation - player model stays in fixed orientation
-        
+
         if (this.playerImage.complete) {
             const shipWidth = this.player.size * 2;
             const shipHeight = this.player.size * 2;
             this.ctx.drawImage(this.playerImage, -shipWidth/2, -shipHeight/2, shipWidth, shipHeight);
         } else {
-            // Fallback rendering while image loads
             this.ctx.fillStyle = '#00ffff';
             this.ctx.fillRect(-this.player.size, -this.player.size/2, this.player.size * 2, this.player.size);
             this.ctx.fillStyle = '#ffffff';
             this.ctx.fillRect(this.player.size, -3, 8, 6);
         }
-        
+
         this.ctx.restore();
-        
-        // Draw bullets
+
         this.bullets.forEach(bullet => {
             if (this.bulletImages[bullet.animFrame] && this.bulletImages[bullet.animFrame].complete) {
-                // Draw bullet image without rotation first to see if it's visible
                 const bulletWidth = bullet.size * 1.5;
                 const bulletHeight = bullet.size * 1.5;
-                this.ctx.drawImage(this.bulletImages[bullet.animFrame], 
-                                 bullet.x - bulletWidth/2, 
-                                 bullet.y - bulletHeight/2, 
+                this.ctx.drawImage(this.bulletImages[bullet.animFrame],
+                                 bullet.x - bulletWidth/2,
+                                 bullet.y - bulletHeight/2,
                                  bulletWidth, bulletHeight);
             } else {
-                // Fallback rendering - always visible yellow circle
                 this.ctx.fillStyle = '#ffff00';
                 this.ctx.beginPath();
                 this.ctx.arc(bullet.x, bullet.y, bullet.size, 0, Math.PI * 2);
                 this.ctx.fill();
-                
-                // Add a bright border to make it more visible
                 this.ctx.strokeStyle = '#ffffff';
                 this.ctx.lineWidth = 2;
                 this.ctx.stroke();
             }
-            
-            // Bullet trail effect
+
             this.ctx.strokeStyle = '#ffff0040';
             this.ctx.lineWidth = 2;
             this.ctx.beginPath();
@@ -466,60 +464,51 @@ class GalacticPulse {
             this.ctx.lineTo(bullet.x - bullet.vx * 3, bullet.y - bullet.vy * 3);
             this.ctx.stroke();
         });
-        
-        // Draw enemies
+
         this.enemies.forEach(enemy => {
             if (this.enemyImage.complete) {
-                // Draw enemy ship image
                 const shipWidth = enemy.size * 1.5;
                 const shipHeight = enemy.size * 1.5;
-                this.ctx.drawImage(this.enemyImage, 
-                                 enemy.x - shipWidth/2, 
-                                 enemy.y - shipHeight/2, 
+                this.ctx.drawImage(this.enemyImage,
+                                 enemy.x - shipWidth/2,
+                                 enemy.y - shipHeight/2,
                                  shipWidth, shipHeight);
             } else {
-                // Fallback rendering while image loads
                 this.ctx.fillStyle = enemy.type === 'heavy' ? '#ff6600' : '#ff0000';
                 this.ctx.beginPath();
                 this.ctx.arc(enemy.x, enemy.y, enemy.size, 0, Math.PI * 2);
                 this.ctx.fill();
             }
-            
-            // Enemy health bar
+
             if (enemy.health < enemy.maxHealth) {
                 const barWidth = enemy.size * 2;
                 const barHeight = 4;
                 this.ctx.fillStyle = '#333';
                 this.ctx.fillRect(enemy.x - barWidth/2, enemy.y - enemy.size - 10, barWidth, barHeight);
                 this.ctx.fillStyle = '#ff0000';
-                this.ctx.fillRect(enemy.x - barWidth/2, enemy.y - enemy.size - 10, 
+                this.ctx.fillRect(enemy.x - barWidth/2, enemy.y - enemy.size - 10,
                                 (enemy.health / enemy.maxHealth) * barWidth, barHeight);
             }
         });
-        
-        // Draw enemy bullets
+
         this.enemyBullets.forEach(bullet => {
             if (this.enemyBulletImages[bullet.animFrame] && this.enemyBulletImages[bullet.animFrame].complete) {
-                // Draw enemy bullet image
                 const bulletWidth = bullet.size * 1.5;
                 const bulletHeight = bullet.size * 1.5;
-                this.ctx.drawImage(this.enemyBulletImages[bullet.animFrame], 
-                                 bullet.x - bulletWidth/2, 
-                                 bullet.y - bulletHeight/2, 
+                this.ctx.drawImage(this.enemyBulletImages[bullet.animFrame],
+                                 bullet.x - bulletWidth/2,
+                                 bullet.y - bulletHeight/2,
                                  bulletWidth, bulletHeight);
             } else {
-                // Fallback rendering
                 this.ctx.fillStyle = '#ff0000';
                 this.ctx.beginPath();
                 this.ctx.arc(bullet.x, bullet.y, bullet.size, 0, Math.PI * 2);
                 this.ctx.fill();
-                
                 this.ctx.strokeStyle = '#ffffff';
                 this.ctx.lineWidth = 2;
                 this.ctx.stroke();
             }
-            
-            // Enemy bullet trail
+
             this.ctx.strokeStyle = '#ff000040';
             this.ctx.lineWidth = 2;
             this.ctx.beginPath();
@@ -527,8 +516,7 @@ class GalacticPulse {
             this.ctx.lineTo(bullet.x - bullet.vx * 3, bullet.y - bullet.vy * 3);
             this.ctx.stroke();
         });
-        
-        // Draw pulse waves
+
         this.ctx.strokeStyle = '#00ffff';
         this.ctx.lineWidth = 3;
         this.pulseWaves.forEach(wave => {
@@ -538,8 +526,7 @@ class GalacticPulse {
             this.ctx.stroke();
         });
         this.ctx.globalAlpha = 1;
-        
-        // Draw particles
+
         this.particles.forEach(particle => {
             this.ctx.globalAlpha = particle.alpha;
             this.ctx.fillStyle = particle.color;
@@ -549,42 +536,32 @@ class GalacticPulse {
         });
         this.ctx.globalAlpha = 1;
     }
-  gameOver() {
-    this.gameRunning = false;
-    document.getElementById("gameOver").style.display = "block";
 
-    // --- Save score using current user from main.js ---
-    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    let playerName = currentUser && currentUser.username ? currentUser.username : "Anonymous";
-
-    let scores = JSON.parse(localStorage.getItem("galacticPulseScores")) || [];
-    let existingPlayer = scores.find(entry => entry.name === playerName);
-
-    if (existingPlayer) {
-        // Only update if this run has a higher score
-        if (this.score > existingPlayer.score) {
-            existingPlayer.score = this.score;
+    gameOver() {
+        this.gameRunning = false;
+        document.getElementById("gameOver").style.display = "block";
+        const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        let playerName = currentUser && currentUser.username ? currentUser.username : "Anonymous";
+        let scores = JSON.parse(localStorage.getItem("galacticPulseScores")) || [];
+        let existingPlayer = scores.find(entry => entry.name === playerName);
+        if (existingPlayer) {
+            if (this.score > existingPlayer.score) {
+                existingPlayer.score = this.score;
+            }
+        } else {
+            scores.push({ name: playerName, score: this.score });
         }
-    } else {
-        scores.push({ name: playerName, score: this.score });
-    }
-
-    // Sort & keep top 10 scores
-    scores.sort((a, b) => b.score - a.score);
-    scores = scores.slice(0, 10);
-
-    localStorage.setItem("galacticPulseScores", JSON.stringify(scores));
-
-    // Also update currentUser's best score
-    if (currentUser) {
-        if (this.score > currentUser.score) {
-            currentUser.score = this.score;
-            localStorage.setItem("currentUser", JSON.stringify(currentUser));
+        scores.sort((a, b) => b.score - a.score);
+        scores = scores.slice(0, 10);
+        localStorage.setItem("galacticPulseScores", JSON.stringify(scores));
+        if (currentUser) {
+            if (this.score > currentUser.score) {
+                currentUser.score = this.score;
+                localStorage.setItem("currentUser", JSON.stringify(currentUser));
+            }
         }
     }
-}
 
-    
     restart() {
         this.player.health = this.player.maxHealth;
         this.player.energy = this.player.maxEnergy;
@@ -597,12 +574,17 @@ class GalacticPulse {
         this.particles = [];
         this.score = 0;
         this.gameRunning = true;
+        this.paused = false;
         document.getElementById('gameOver').style.display = 'none';
+        document.getElementById('pauseMenu').style.display = 'none';
     }
-    
+
     gameLoop() {
         this.update();
         this.render();
         requestAnimationFrame(() => this.gameLoop());
     }
 }
+
+// Initialize the game
+const game = new GalacticPulse();
